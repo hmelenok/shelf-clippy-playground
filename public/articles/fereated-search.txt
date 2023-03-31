@@ -1,0 +1,11 @@
+Federated search is needed for several reasons:
+
+Centralized access to multiple sources: Federated search provides a centralized access point to multiple sources of information. This makes it easier and more convenient for users to search across multiple sources and retrieve relevant results.
+
+Time-saving: Federated search can save a significant amount of time compared to searching each source separately. With federated search, users can submit a single query and retrieve results from multiple sources simultaneously.
+
+Improved search accuracy: By searching multiple sources simultaneously, federated search can increase the chances of finding the most relevant information. This is particularly useful in situations where the information may be spread across multiple sources or where it may be difficult to determine the best source for a particular query.
+
+Cost-effective: Federated search can be a cost-effective solution for organizations that need to access multiple sources of information. Rather than purchasing individual subscriptions to each source, federated search can provide access to all sources through a single interface.
+
+Overall, federated search can help to improve the efficiency of the search process, save time, and provide a more comprehensive and accurate set of search results, making it a valuable tool for users and organizations that need to access multiple sources of information.
