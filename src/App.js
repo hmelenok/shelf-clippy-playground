@@ -4,23 +4,17 @@ import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { useCallback, useState } from "react";
-import { styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
+import { useCallback, useEffect, useState } from "react";
 import ComboBox from "./components/ComboBox";
 import { articlesURLs } from "./constants";
-import { useFetchArticle } from "./App.helpers";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  color: theme.palette.text.secondary,
-}));
+import { useDecisionMakingCenter, useFetchArticle } from "./App.helpers";
+import Item from "./components/Item";
+import Clippy from "./components/Clippy";
 
 export default function App() {
   const [textInput, setTextInput] = useState("");
   const { fetchArticle } = useFetchArticle();
+  const { makeDecisionOnContent, currentDecision } = useDecisionMakingCenter();
   const debouncedText = useDebounce(textInput, 500);
 
   const onArticleSelect = useCallback(async (_, article) => {
@@ -32,61 +26,77 @@ export default function App() {
     setTextInput(event.currentTarget.value);
   }, []);
 
-  return (
-    <Box component="form" sx={{ flexGrow: 1 }} noValidate autoComplete="off">
-      <Typography variant="h1" gutterBottom>
-        📎 Clippy playground
-      </Typography>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Item>
-            <Typography variant="h2" gutterBottom>
-              User Input
-            </Typography>
-            <Typography variant="h3" gutterBottom>
-              Sources
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <Item>
-                  {" "}
-                  <ComboBox
-                    fullWidth
-                    options={articlesURLs}
-                    onChange={onArticleSelect}
-                  />
-                </Item>
-              </Grid>
-              <Grid item xs={12}>
-                <Item>
-                  <TextField
-                    fullWidth
-                    id="manual-text"
-                    label="Manual Input"
-                    multiline
-                    rows={10}
-                    defaultValue=""
-                    variant="filled"
-                    onChange={onManualInput}
-                  />
-                </Item>
-              </Grid>
-            </Grid>
+  useEffect(() => {
+    makeDecisionOnContent(debouncedText);
+  }, [debouncedText]);
 
-            <Typography variant="h3" gutterBottom>
-              Selected text
-            </Typography>
-            <div dangerouslySetInnerHTML={{ __html: debouncedText }} />
-          </Item>
+  return (
+    <>
+      <Clippy decision={currentDecision} />
+      <Box component="form" sx={{ flexGrow: 1 }} noValidate autoComplete="off">
+        <Typography variant="h1" gutterBottom>
+          📎 Clippy playground
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Item>
+              <Typography variant="h2" gutterBottom>
+                User Input
+              </Typography>
+              <Typography variant="h3" gutterBottom>
+                Sources
+              </Typography>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Item>
+                    {" "}
+                    <ComboBox
+                      fullWidth
+                      options={articlesURLs}
+                      onChange={onArticleSelect}
+                    />
+                  </Item>
+                </Grid>
+                <Grid item xs={12}>
+                  <Item>
+                    <TextField
+                      fullWidth
+                      id="manual-text"
+                      label="Manual Input"
+                      multiline
+                      rows={10}
+                      defaultValue=""
+                      variant="filled"
+                      onChange={onManualInput}
+                    />
+                  </Item>
+                </Grid>
+              </Grid>
+
+              <Typography variant="h3" gutterBottom>
+                Selected text
+              </Typography>
+              <div dangerouslySetInnerHTML={{ __html: debouncedText }} />
+            </Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item>
+              <Typography variant="h2" gutterBottom>
+                Server Output
+              </Typography>
+              <Typography variant="h3" gutterBottom>
+                Suggested decision
+              </Typography>
+              <p>{currentDecision}</p>
+
+              <Typography variant="h3" gutterBottom>
+                Transformed output
+              </Typography>
+              <p>//TODO</p>
+            </Item>
+          </Grid>
         </Grid>
-        <Grid item xs={6}>
-          <Item>
-            <Typography variant="h2" gutterBottom>
-              Server Output
-            </Typography>
-          </Item>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+    </>
   );
 }

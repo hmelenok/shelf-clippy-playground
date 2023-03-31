@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { DECISIONS } from "./constants";
 
 export const useFetchArticle = () => {
@@ -17,21 +18,23 @@ export const useFetchArticle = () => {
 };
 
 export const useDecisionMakingCenter = () => {
+  const [currentDecision, setCurrentDecision] = useState(DECISIONS.NO_DESISION);
+
   const makeDecisionOnContent = (text) => {
     if (text.includes("list")) {
-      return DECISIONS.LIST;
+      return setCurrentDecision(DECISIONS.LIST);
     }
 
     if (text.includes("table")) {
-      return DECISIONS.TABLE;
+      return setCurrentDecision(DECISIONS.TABLE);
     }
 
     if (text.includes("faq")) {
-      return DECISIONS.FAQ;
+      return setCurrentDecision(DECISIONS.FAQ);
     }
 
-    return DECISIONS.NO_DESISION;
+    return setCurrentDecision(DECISIONS.NO_DESISION);
   };
 
-  return { makeDecisionOnContent };
+  return { makeDecisionOnContent, currentDecision };
 };

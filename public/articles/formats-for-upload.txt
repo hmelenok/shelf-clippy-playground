@@ -1,0 +1,1 @@
+We can accept JPEG, JPG, BMP, GIF, PDF and PNG formats for upload.
